@@ -16,7 +16,6 @@ import coil.api.load
 import coil.size.Scale
 import coil.transform.CircleCropTransformation
 import com.codechallenge.revolutcodechallenge.FlagLink
-import com.codechallenge.revolutcodechallenge.LinksToFlagsPictures
 import com.codechallenge.revolutcodechallenge.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -40,8 +39,10 @@ class MainFragment : Fragment(R.layout.main_fragment), LifecycleOwner {
             layoutManager = LinearLayoutManager(context)
         }
         subscribeOnViewModelState()
-        viewModel.onAction(ViewModelAction
-            .StartRefreshing(mainFragmentAdapter.getCurrentTopCurrency().name))
+        viewModel.onAction(
+            ViewModelAction
+                .StartRefreshing(mainFragmentAdapter.getCurrentTopCurrency().name)
+        )
         mainFragmentAdapter.setMainCurrencyChanged { newCurrency ->
             viewModel.onAction(ViewModelAction.StartRefreshing(newCurrency))
             refreshTopCurrencyView(mainFragmentAdapter.getCurrentTopCurrency())

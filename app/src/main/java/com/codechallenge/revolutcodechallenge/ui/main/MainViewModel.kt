@@ -5,15 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codechallenge.revolutcodechallenge.Calculator
 import com.codechallenge.revolutcodechallenge.repository.Repository
-import com.codechallenge.revolutcodechallenge.response.Response
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.observers.DisposableObserver
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
@@ -49,7 +45,7 @@ class MainViewModel @ViewModelInject constructor(
                 }
                 calculator.calculate(response.rates, coefficientTransformation)
             }
-            .subscribeWith(object: DisposableObserver<List<Presentations>>() {
+            .subscribeWith(object : DisposableObserver<List<Presentations>>() {
                 override fun onComplete() {
                     disposable.dispose()
                 }
