@@ -2,7 +2,8 @@ package com.codechallenge.revolutcodechallenge
 
 object LinksToFlagsPictures {
 
-    val flagsList = listOf(
+    val flagsList = mutableListOf(
+        FlagLink("EUR", R.drawable.eu, "Europa Euro"),
         FlagLink("AUD", R.drawable.au, "Australia Dollar"),
         FlagLink("BGN", R.drawable.bg,"Bulgaria Lev"),
         FlagLink("BRL", R.drawable.br, "Brazil Real"),

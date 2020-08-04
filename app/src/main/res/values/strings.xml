@@ -3,4 +3,5 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="header">Rates</string>
+    <string name="image">Image</string>
 </resources>

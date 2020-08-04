@@ -10,15 +10,22 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.size.Scale
 import coil.transform.CircleCropTransformation
+import com.codechallenge.revolutcodechallenge.FlagLink
 import com.codechallenge.revolutcodechallenge.LinksToFlagsPictures
 import com.codechallenge.revolutcodechallenge.R
+import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MainFragmentAdapter @Inject constructor() :
     RecyclerView.Adapter<MainFragmentAdapter.MainFragmentsViewHolder>() {
 
-    private val currenciesList = LinksToFlagsPictures.flagsList
-
+    private val currenciesList =
+        LinksToFlagsPictures.flagsList.subList(1, LinksToFlagsPictures.flagsList.lastIndex)
+    private var rates: HashMap<String, String> = hashMapOf()
+    private lateinit var mainCurrencyChanged: (String) -> Unit
+    private var currentTopCurrency = LinksToFlagsPictures.flagsList[0]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainFragmentsViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -30,17 +37,59 @@ class MainFragmentAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: MainFragmentsViewHolder, position: Int) {
         val flagLink = currenciesList[position]
-        val currency = holder.value.editableText
         holder.title.text = flagLink.name
         holder.description.text = flagLink.description
-        currency.clear()
-        currency.insert(0, "1234.56")
         holder.image.load(flagLink.link) {
             scale(Scale.FIT)
             placeholder(R.drawable.ic_baseline_outlined_flag_24)
             transformations(CircleCropTransformation())
         }
+        holder.value.setText(getValueFor(flagLink.name))
+        changeValue(holder.value, flagLink.name)
+        holder.itemView.setOnClickListener {
+            changePositions(position)
+        }
     }
+
+    private fun getValueFor(currencyName: String): String {
+        if (rates.containsKey(currencyName)) {
+            return rates[currencyName]!!
+        }
+        return ""
+    }
+
+    private fun changeValue(
+        editTextView: EditText,
+        currencyName: String
+    ) {
+        if (rates.isEmpty()) return
+        val editText = editTextView.editableText
+        editText.clear()
+        editTextView.setText(rates[currencyName])
+    }
+
+    private fun changePositions(position: Int) {
+        val flagLink = currenciesList[position]
+        currenciesList.removeAt(position)
+        currenciesList.add(0, currentTopCurrency)
+        currentTopCurrency = flagLink
+        notifyDataSetChanged()
+        mainCurrencyChanged(flagLink.name)
+    }
+
+    fun setRates(presentations: List<Presentations>) {
+        rates.clear()
+        for (presentation in presentations) {
+            rates[presentation.currency] = presentation.rate
+        }
+        notifyDataSetChanged()
+    }
+
+    fun setMainCurrencyChanged(listener: (String) -> Unit) {
+        this.mainCurrencyChanged = listener
+    }
+
+    fun getCurrentTopCurrency(): FlagLink = currentTopCurrency
 
     class MainFragmentsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.title)

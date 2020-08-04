@@ -60,6 +60,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     //image downloading tools
     implementation "io.coil-kt:coil:$coil_version"
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+    //RxJava
+    implementation "io.reactivex.rxjava3:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
     //Unit tests
     testImplementation 'junit:junit:4.13'
     //UI tests
